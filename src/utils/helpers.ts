@@ -43,3 +43,19 @@ export const createNewGrid = (grid:GridType,row:number,col:number)=>{
     newGrid[row][col] = newTile;
     return newGrid;
 }
+
+export const isEqual = (a:TileType ,b:TileType)=>{
+    return a.row === b.row && a.col === b.col;
+}
+
+export const isRowColEqual = (row:number , col :number,tile:TileType)=>{
+    return row === tile.row && col === tile.col;
+}
+
+//Function Call: When you call sleep(ms), it creates a new promise.
+//Timer: The promise sets a timer using setTimeout, which waits for ms milliseconds before calling the resolve function.
+//Resolution: Once the timer expires, setTimeout calls resolve, which resolves the promise.
+//Await: If you use await sleep(ms), it pauses the execution of the async function until the promise resolves, effectively causing a delay.
+export const sleep = (ms:number) =>{
+    return new Promise((resolve)=> setTimeout(resolve,ms))
+}
