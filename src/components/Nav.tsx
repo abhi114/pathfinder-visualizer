@@ -5,11 +5,14 @@ import { MAZES } from "../utils/constants";
 import { resetGrid } from "../utils/resetGrid";
 import { MazeType } from "../utils/types";
 import { Select } from "./Select";
+import { runMazeAlgorithm } from "../utils/runMazeAlgorithm";
+import { useSpeed } from "../hooks/useSpeed";
 
 export function Nav(){
     const [isDisabled,setIsDisabled] = useState(false); 
-    const {maze,setMaze,grid} = usePathfinding();
+    const {maze,setMaze,grid,setGrid,setIsGraphVisualized} = usePathfinding();
     const {startTile,endTile} = useTile();
+    const {speed} = useSpeed();
     const handleGenerateMaze = (maze:MazeType)=>{
         if(maze==='NONE'){
             setMaze(maze);
@@ -20,6 +23,12 @@ export function Nav(){
         setMaze(maze);
         setIsDisabled(true);    
         //runMazeAlgorith
+        runMazeAlgorithm({maze,grid,startTile,endTile,setIsDisabled,speed} )
+        //creating a shallow copy of the current grid so that any updates are not on the original grid state
+        const newGrid = grid.slice();
+        setGrid(newGrid);
+        //to give that we have changed the grid and any previous graph visualization is no longer valid
+        setIsGraphVisualized(false);
     }
     return(
         <div className="flex items-center justify-center min-h-[4.5rem] border-b shadow-gray-600 sm:px-5 px-0">
