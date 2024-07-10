@@ -45,3 +45,4 @@ export const SPEEDS:SpeedSelectType[] = [
     {name:"Fast",value:0.5},
 
 ]
+export const SLEEP_TIME = 8;
