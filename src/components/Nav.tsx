@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { usePathfinding } from "../hooks/usePathfinding";
 import { useTile } from "../hooks/useTile";
-import { MAZES } from "../utils/constants";
+import { MAZES, pathFindingAlgorithms } from "../utils/constants";
 import { resetGrid } from "../utils/resetGrid";
-import { MazeType } from "../utils/types";
+import { AlgorithmType, MazeType } from "../utils/types";
 import { Select } from "./Select";
 import { runMazeAlgorithm } from "../utils/runMazeAlgorithm";
 import { useSpeed } from "../hooks/useSpeed";
+import { PlayButton } from "./PlayButton";
 
 export function Nav(){
     const [isDisabled,setIsDisabled] = useState(false); 
-    const {maze,setMaze,grid,setGrid,setIsGraphVisualized} = usePathfinding();
+    const {maze,setMaze,grid,setGrid,setIsGraphVisualized,isGraphVisualized,algorithm,setAlgorithm} = usePathfinding();
     const {startTile,endTile} = useTile();
     const {speed} = useSpeed();
     const handleGenerateMaze = (maze:MazeType)=>{
@@ -30,6 +31,14 @@ export function Nav(){
         //to give that we have changed the grid and any previous graph visualization is no longer valid
         setIsGraphVisualized(false);
     }
+    const handlerRunVisualizer = () =>{
+        if(isGraphVisualized){
+            setIsGraphVisualized(false);
+            resetGrid({grid:grid.slice(),startTile,endTile})
+            return
+        } 
+        // run the algorithm
+    }
     return(
         <div className="flex items-center justify-center min-h-[4.5rem] border-b shadow-gray-600 sm:px-5 px-0">
             <div className="flex items-center lg:justify-between justify-center w-full sm:w-[52rem]">
@@ -44,6 +53,15 @@ export function Nav(){
                         handleGenerateMaze(e.target.value as MazeType);
                     }}
                         />
+                        <Select label="Graph Select" value={algorithm} 
+                        options={pathFindingAlgorithms}
+                        onChange={(e)=>{
+                            /** Type Assertion (as AlgorithmType): The selected value (e.target.value) is cast to AlgorithmType. 
+                             * This type assertion is necessary because e.target.value is of type string, but you want to ensure it 
+                             * conforms to the AlgorithmType union type defined in your code. */
+                            setAlgorithm(e.target.value as AlgorithmType)
+                        }}/>
+                        <PlayButton isDisabled={isDisabled} isGraphVisualized={isGraphVisualized} handlerRunVisualizer={()=>{handlerRunVisualizer}}/>
                 </div>
             </div>
         </div>
