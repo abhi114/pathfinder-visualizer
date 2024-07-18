@@ -1,20 +1,21 @@
-import { useState } from "react";
+import { MutableRefObject, useState } from "react";
 import { usePathfinding } from "../hooks/usePathfinding";
 import { useTile } from "../hooks/useTile";
-import { MAZES, pathFindingAlgorithms } from "../utils/constants";
+import { EXTENDED_SLEEP_TIME, MAZES, pathFindingAlgorithms, SLEEP_TIME, SPEEDS } from "../utils/constants";
 import { resetGrid } from "../utils/resetGrid";
-import { AlgorithmType, MazeType } from "../utils/types";
+import { AlgorithmType, MazeType, SpeedType } from "../utils/types";
 import { Select } from "./Select";
 import { runMazeAlgorithm } from "../utils/runMazeAlgorithm";
 import { useSpeed } from "../hooks/useSpeed";
 import { PlayButton } from "./PlayButton";
 import { runPathFindingAlgorithm } from "../utils/runPathFindingAlgorithm";
+import { animatePath } from "../utils/animatePath";
 
-export function Nav(){
+export function Nav({isVisualizationRunngingRef}:{isVisualizationRunngingRef:MutableRefObject<boolean>}){
     const [isDisabled,setIsDisabled] = useState(false); 
     const {maze,setMaze,grid,setGrid,setIsGraphVisualized,isGraphVisualized,algorithm,setAlgorithm} = usePathfinding();
     const {startTile,endTile} = useTile();
-    const {speed} = useSpeed();
+    const {speed,setSpeed} = useSpeed();
     const handleGenerateMaze = (maze:MazeType)=>{
         if(maze==='NONE'){
             setMaze(maze);
@@ -40,8 +41,17 @@ export function Nav(){
         } 
         // run the algorithm
        const {traversedTiles,path} =  runPathFindingAlgorithm({algorithm,grid,startTile,endTile})
-        console.log("traversed Tile", traversedTiles);
-        console.log("path", path);
+        animatePath(traversedTiles,path,startTile,endTile,speed)
+        //to stop people from interacting with the grid
+        setIsDisabled(true);
+        isVisualizationRunngingRef.current =true;
+        setTimeout(() => {
+            const newGrid = grid.slice();
+            setGrid(newGrid);
+            setIsGraphVisualized(true);
+            setIsDisabled(false);
+            isVisualizationRunngingRef.current = false;
+        }, (SLEEP_TIME * (traversedTiles.length + SLEEP_TIME * 2) + EXTENDED_SLEEP_TIME * (path.length + 60) * SPEEDS.find((s)=>s.value === speed)!.value));
     }
     return(
         <div className="flex items-center justify-center min-h-[4.5rem] border-b shadow-gray-600 sm:px-5 px-0">
@@ -65,6 +75,7 @@ export function Nav(){
                              * conforms to the AlgorithmType union type defined in your code. */
                             setAlgorithm(e.target.value as AlgorithmType)
                         }}/>
+                        <Select label="Speed" value={speed} options={SPEEDS} isDisabled={isDisabled} onChange={(e)=>{setSpeed(parseInt(e.target.value) as SpeedType)}}/>
                         <PlayButton isDisabled={isDisabled} isGraphVisualized={isGraphVisualized} handlerRunVisualizer={handlerRunVisualizer}/>
                 </div>
             </div>

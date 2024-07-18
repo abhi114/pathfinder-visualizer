@@ -54,6 +54,11 @@ export default {
           },
         },
       },
+      animation:{
+        traversed:"traversed 0.5s cubic-bezier(0,0,0.2,1)",
+        path: "path 1.5s cubic-bezier(0,0,0.2,1)",
+        wall: "wall 0.3s cubic-be zier(0.4,0,0.2,1)",
+      }
     },
   },
   plugins: [],
