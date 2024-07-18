@@ -51,4 +51,6 @@ export const SPEEDS:SpeedSelectType[] = [
 
 ]
 export const SLEEP_TIME = 8;
+//for the path delay animation
+export const EXTENDED_SLEEP_TIME = 30;
 
