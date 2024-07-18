@@ -8,6 +8,7 @@ import { Select } from "./Select";
 import { runMazeAlgorithm } from "../utils/runMazeAlgorithm";
 import { useSpeed } from "../hooks/useSpeed";
 import { PlayButton } from "./PlayButton";
+import { runPathFindingAlgorithm } from "../utils/runPathFindingAlgorithm";
 
 export function Nav(){
     const [isDisabled,setIsDisabled] = useState(false); 
@@ -38,6 +39,9 @@ export function Nav(){
             return
         } 
         // run the algorithm
+       const {traversedTiles,path} =  runPathFindingAlgorithm({algorithm,grid,startTile,endTile})
+        console.log("traversed Tile", traversedTiles);
+        console.log("path", path);
     }
     return(
         <div className="flex items-center justify-center min-h-[4.5rem] border-b shadow-gray-600 sm:px-5 px-0">
@@ -61,7 +65,7 @@ export function Nav(){
                              * conforms to the AlgorithmType union type defined in your code. */
                             setAlgorithm(e.target.value as AlgorithmType)
                         }}/>
-                        <PlayButton isDisabled={isDisabled} isGraphVisualized={isGraphVisualized} handlerRunVisualizer={()=>{handlerRunVisualizer}}/>
+                        <PlayButton isDisabled={isDisabled} isGraphVisualized={isGraphVisualized} handlerRunVisualizer={handlerRunVisualizer}/>
                 </div>
             </div>
         </div>

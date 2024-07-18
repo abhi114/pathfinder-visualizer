@@ -1,5 +1,6 @@
 import { getUntraversedNeighbours } from "../../../utils/getUntraversedNeighbours";
 import { isEqual } from "../../../utils/helpers";
+import { isInQueue } from "../../../utils/isInQueue";
 import { GridType, TileType } from "../../../utils/types";
 
 export const bfs = (grid:GridType,startTile:TileType,endTile:TileType)=>{
@@ -23,10 +24,27 @@ export const bfs = (grid:GridType,startTile:TileType,endTile:TileType)=>{
         //finding the untraversed neighbours of the tile
         const neighbour = getUntraversedNeighbours(grid,tile);
         for(let i=0;i<neighbour.length;i++){
-             
+             if(!isInQueue(neighbour[i],unTraversed)){
+                const neig = neighbour[i];
+                neig.distance = tile.distance +1;
+                neig.parent = tile;
+                unTraversed.push(neig);
+             }
+
         }
 
         
 
     }
+    const path = [];
+    let tile = grid[endTile.row][endTile.col];
+    while(tile != null){
+        //The unshift() method adds new elements to the beginning of an array.
+        //The unshift() method overwrites the original array.
+        tile.isPath = true;
+        path.unshift(tile);
+        tile = tile.parent!; // this line is setting the new tile as the previous tile
+
+    }
+    return {traversedTiles,path};
 }
