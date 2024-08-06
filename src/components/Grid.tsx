@@ -69,6 +69,7 @@ return (
         <div className="contents">
             <h2 className="capitalize hover:uppercase mt-5">created by - Abhishek Nigam</h2>
         </div>
+        
     </div>
 )
 

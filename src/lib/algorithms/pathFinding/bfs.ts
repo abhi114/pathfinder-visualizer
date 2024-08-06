@@ -30,7 +30,6 @@ export const bfs = (grid:GridType,startTile:TileType,endTile:TileType)=>{
                 neig.parent = tile;
                 unTraversed.push(neig);
              }
-
         }
 
         
@@ -38,7 +37,7 @@ export const bfs = (grid:GridType,startTile:TileType,endTile:TileType)=>{
     }
     const path = [];
     let tile = grid[endTile.row][endTile.col];
-    while(tile != null){
+    while(tile !== null){
         //The unshift() method adds new elements to the beginning of an array.
         //The unshift() method overwrites the original array.
         tile.isPath = true;

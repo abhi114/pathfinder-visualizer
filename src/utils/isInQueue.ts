@@ -6,4 +6,4 @@ export function isInQueue(tile:TileType,queue:TileType[]){
         if(isEqual(tile,queue[i])) return true;
     }
     return false;
-}
+} 
