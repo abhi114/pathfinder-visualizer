@@ -1,0 +1,52 @@
+The provided code implements Dijkstra's algorithm to find the shortest path from a start tile to an end tile in a grid. Here's a detailed breakdown of how the algorithm is implemented:
+
+Initialization:
+
+An empty array traversedTiles is created to keep track of the tiles that have been processed.
+The start tile's distance is set to 0, and it's marked as traversed.
+The start tile is added to the untraversedTiles array, which will be used as a priority queue to process tiles.
+Main Loop:
+
+The loop continues as long as there are tiles in the untraversedTiles array.
+The array is sorted based on the distance property of the tiles, ensuring the tile with the smallest distance is processed first.
+The tile with the smallest distance (currentTile) is removed from the front of the array.
+If the currentTile is a wall, it's skipped.
+If the currentTile's distance is infinity, it indicates that the remaining tiles are unreachable, so the loop breaks.
+The currentTile is marked as traversed and added to the traversedTiles array.
+If the currentTile is the end tile, the loop breaks.
+Processing Neighbors:
+
+The neighbors of the currentTile are obtained using the getUntraversedNeighbours function.
+For each neighbor, if the distance from the start tile to this neighbor through the currentTile is smaller than the neighbor's current distance, the neighbor's distance is updated, its parent is set to the currentTile, and it's re-added to the untraversedTiles array.
+Path Reconstruction:
+
+After the main loop, the path is reconstructed by tracing back from the end tile to the start tile using the parent references.
+The tiles in the path are marked, and the path is returned along with the traversedTiles.
+Helper Functions
+isEqual:
+
+Compares two tiles to see if they have the same row and column values.
+getUntraversedNeighbours:
+
+Returns the neighbors of a given tile that haven't been traversed yet.
+Checks the tile's position to avoid out-of-bound errors and adds valid neighbors to the array.
+Filters out the neighbors that have already been traversed.
+dropFromQueue:
+
+Removes a specific tile from the queue (array) by comparing it with each tile in the queue and splicing it out if a match is found.
+Example of Usage
+Let's consider a simple 3x3 grid:
+
+css
+Copy code
+[S] [ ] [ ]
+[ ] [X] [ ]
+[ ] [ ] [E]
+S is the start tile, E is the end tile, X is a wall, and [ ] are traversable tiles.
+The algorithm will:
+
+Start from S, set its distance to 0, and mark it as traversed.
+Process the neighbors of S, updating their distances and setting their parent to S.
+Continue processing the tiles with the smallest distances, skipping walls and already traversed tiles.
+Once it reaches E, it reconstructs the path from E back to S.
+The result will be the shortest path from S to E and the list of tiles that were traversed in the process.
