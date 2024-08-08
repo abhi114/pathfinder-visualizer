@@ -12,15 +12,15 @@ export const dijkstra = (grid:GridType,startTile:TileType,endTile:TileType)=>{
         untraversedTiles.sort((a,b)=>a.distance - b.distance) //sort in ascending order
         const currentTile = untraversedTiles.shift()
         if(currentTile){
-            if(currentTile.isWall) continue
-            if(currentTile.distance === Infinity) break
+            if(currentTile.isWall) continue;
+            if(currentTile.distance === Infinity) break;
             currentTile.isTraversed = true;
-            traversedTiles.push(currentTile)
-            if(isEqual(currentTile,endTile))break
+            traversedTiles.push(currentTile);
+            if(isEqual(currentTile,endTile))break;
             const neigbors = getUntraversedNeighbours(grid,currentTile)
             for(let i =0;i<neigbors.length;i++){
                 if(currentTile.distance +1 < neigbors[i].distance){
-                    dropFromQueue(neigbors[i],untraversedTiles)
+                    dropFromQueue(neigbors[i],untraversedTiles);
                     neigbors[i].distance = currentTile.distance +1
                     neigbors[i].parent = currentTile
                     untraversedTiles.push(neigbors[i])
@@ -33,7 +33,7 @@ export const dijkstra = (grid:GridType,startTile:TileType,endTile:TileType)=>{
     while(current !== null){
         current.isPath = true
         path.unshift(current)
-        current.parent!
+        current = current.parent!
     }
     return {traversedTiles,path}
 }
